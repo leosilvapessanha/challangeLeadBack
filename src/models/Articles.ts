@@ -7,7 +7,7 @@ class Articles {
 
   description: string;
 
-  constructor(title: string, description: string) {
+  constructor({ title, description }: Omit<Articles, 'id'>) {
     this.id = uuid();
     this.title = title;
     this.description = description;

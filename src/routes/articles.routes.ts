@@ -1,23 +1,28 @@
 import { Router } from 'express';
-import Articles from '../models/Articles';
+
+import ArticlesRepository from '../repositories/ArticlesRepository';
+import CreateArticleService from '../services/CreateArticleService';
 
 const articlesRoutes = Router();
 
-const articles: Articles[] = [];
+const articlesRepository = new ArticlesRepository();
+
+articlesRoutes.get('/', (request, response) => {
+  const listArticles = articlesRepository.all();
+
+  return response.json(listArticles);
+});
 
 articlesRoutes.post('/', (request, response) => {
-  const { title, description }: Articles = request.body;
+  try {
+    const { title, description } = request.body;
+    const createArticles = new CreateArticleService(articlesRepository);
+    const article = createArticles.execute({ title, description });
 
-  const findSameArticles = articles.find(article => title === article.title);
-
-  if (findSameArticles) {
-    return response.status(400).json({ message: 'artigo já existente' });
+    return response.json({ article });
+  } catch (err) {
+    return response.status(400).json({ error: err.message });
   }
-
-  const article = new Articles(title, description);
-  articles.push(article);
-
-  return response.json({ article });
 });
 
 export default articlesRoutes;
