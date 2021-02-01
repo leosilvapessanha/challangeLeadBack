@@ -7,8 +7,6 @@ interface Request {
 }
 
 class CreateArticleService {
-  // private articlesRepository: ArticlesRepository;
-
   constructor(private articlesRepository: ArticlesRepository) {
     this.articlesRepository = articlesRepository;
   }
