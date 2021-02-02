@@ -1,23 +1,23 @@
 import { Router } from 'express';
+import { getCustomRepository } from 'typeorm';
 
 import ArticlesRepository from '../repositories/ArticlesRepository';
 import CreateArticleService from '../services/CreateArticleService';
 
 const articlesRoutes = Router();
 
-const articlesRepository = new ArticlesRepository();
-
-articlesRoutes.get('/', (request, response) => {
-  const listArticles = articlesRepository.all();
+articlesRoutes.get('/', async (request, response) => {
+  const articlesRepository = getCustomRepository(ArticlesRepository);
+  const listArticles = await articlesRepository.find();
 
   return response.json(listArticles);
 });
 
-articlesRoutes.post('/', (request, response) => {
+articlesRoutes.post('/', async (request, response) => {
   try {
     const { title, description } = request.body;
-    const createArticles = new CreateArticleService(articlesRepository);
-    const article = createArticles.execute({ title, description });
+    const createArticles = new CreateArticleService();
+    const article = await createArticles.execute({ title, description });
 
     return response.json({ article });
   } catch (err) {

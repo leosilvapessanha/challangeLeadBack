@@ -1,3 +1,5 @@
+import { getCustomRepository } from 'typeorm';
+
 import Articles from '../models/Articles';
 import ArticlesRepository from '../repositories/ArticlesRepository';
 
@@ -7,18 +9,17 @@ interface Request {
 }
 
 class CreateArticleService {
-  constructor(private articlesRepository: ArticlesRepository) {
-    this.articlesRepository = articlesRepository;
-  }
-
-  public execute({ title, description }: Request): Articles {
-    const findSameArticles = this.articlesRepository.findByName(title);
+  public async execute({ title, description }: Request): Promise<Articles> {
+    const articlesRepository = getCustomRepository(ArticlesRepository);
+    const findSameArticles = await articlesRepository.findByName(title);
 
     if (findSameArticles) {
       throw Error('artigo já existente');
     }
 
-    const article = this.articlesRepository.create({ title, description });
+    const article = articlesRepository.create({ title, description });
+
+    await articlesRepository.save(article);
 
     return article;
   }
