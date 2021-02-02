@@ -12,9 +12,10 @@ usersRoutes.post('/', async (request, response) => {
 
     const user = await createUser.execute({ email, password });
 
-    delete user.password;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: userPassword, ...allowedFields } = user;
 
-    return response.json(user);
+    return response.json(allowedFields);
   } catch (err) {
     return response.status(400).json({ error: err.message });
   }
