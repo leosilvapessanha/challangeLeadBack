@@ -3,6 +3,7 @@ import { getRepository } from 'typeorm';
 import { sign } from 'jsonwebtoken';
 
 import User from '../models/User';
+import ensureAuth from '../config/auth';
 
 interface Request {
   email: string;
@@ -26,9 +27,11 @@ class AuthUserService {
       throw new Error('combinação de email e password incorreta');
     }
 
-    const token = sign({}, '8e88f071b2ec71c711eef4d0b460a7b0', {
+    const { secret, expiresIn } = ensureAuth.jwt;
+
+    const token = sign({}, secret, {
       subject: user.id,
-      expiresIn: '1d',
+      expiresIn,
     });
     return { user, token };
   }

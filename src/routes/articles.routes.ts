@@ -3,8 +3,11 @@ import { getCustomRepository } from 'typeorm';
 
 import ArticlesRepository from '../repositories/ArticlesRepository';
 import CreateArticleService from '../services/CreateArticleService';
+import ensureAuth from '../middlewares/ensureAuth';
 
 const articlesRoutes = Router();
+
+articlesRoutes.use(ensureAuth);
 
 articlesRoutes.get('/', async (request, response) => {
   const articlesRepository = getCustomRepository(ArticlesRepository);
