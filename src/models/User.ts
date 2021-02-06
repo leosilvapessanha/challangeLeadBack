@@ -11,6 +11,8 @@ class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  isUnicle: true;
+
   @Column()
   email: string;
 

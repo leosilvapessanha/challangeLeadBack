@@ -10,6 +10,7 @@ export default class CreateArticle1612203906296 implements MigrationInterface {
             name: 'id',
             type: 'uuid',
             isPrimary: true,
+            isUnique: true,
             generationStrategy: 'uuid',
             default: 'uuid_generate_v4()',
           },
