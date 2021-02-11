@@ -17,8 +17,8 @@ class Articles {
   @Column()
   description: string;
 
-  @Column()
-  photo: string;
+  // @Column()
+  // photo: string;
 
   @CreateDateColumn()
   created_at: Date;
